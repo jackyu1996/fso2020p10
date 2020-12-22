@@ -23,6 +23,14 @@ const theme = {
     normal: "400",
     bold: "700",
   },
+  button: {
+    backgroundColor: "#0366d6",
+    textAlign: "center",
+    textAlignVertical: "center",
+    color: "white",
+    lineHeight: 40,
+    borderRadius: 5,
+  },
 };
 
 export default theme;

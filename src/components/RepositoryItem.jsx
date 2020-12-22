@@ -1,5 +1,6 @@
 import React from "react";
-import { View, Image, StyleSheet } from "react-native";
+import { View, Image, StyleSheet, TouchableOpacity } from "react-native";
+import { useHistory } from "react-router-native";
 
 import theme from "../theme";
 import Text from "./Text";
@@ -35,35 +36,55 @@ const approximateNum = (num) => {
 };
 
 const RepositoryItem = ({ item }) => {
+  const history = useHistory();
+
   return (
-    <View style={styles.verticalFlexContainer}>
-      <View style={styles.horizontalFlexContainer}>
-        <Image style={styles.avatar} source={{ uri: item.ownerAvatarUrl }} />
-        <View style={{ flex: 1 }}>
-          <Text testID="fullName" fontWeight="bold">{item.fullName}</Text>
-          <Text testID="description">{item.description}</Text>
-          <Text testID="language" style={styles.languageTag}>{item.language}</Text>
+    <TouchableOpacity
+      onPress={() => {
+        history.push(`/repo/${item.id}`);
+      }}
+    >
+      <View style={styles.verticalFlexContainer}>
+        <View style={styles.horizontalFlexContainer}>
+          <Image style={styles.avatar} source={{ uri: item.ownerAvatarUrl }} />
+          <View style={{ flex: 1 }}>
+            <Text testID="fullName" fontWeight="bold">
+              {item.fullName}
+            </Text>
+            <Text testID="description">{item.description}</Text>
+            <Text testID="language" style={styles.languageTag}>
+              {item.language}
+            </Text>
+          </View>
+        </View>
+        <View style={[styles.horizontalFlexContainer, styles.justifyAround]}>
+          <View style={[styles.centerAlign]}>
+            <Text testID="stargazersCount" fontWeight="bold">
+              {approximateNum(item.stargazersCount)}
+            </Text>
+            <Text>Stars</Text>
+          </View>
+          <View style={[styles.centerAlign]}>
+            <Text testID="forksCount" fontWeight="bold">
+              {approximateNum(item.forksCount)}
+            </Text>
+            <Text>Forks</Text>
+          </View>
+          <View style={[styles.centerAlign]}>
+            <Text testID="reviewCount" fontWeight="bold">
+              {approximateNum(item.reviewCount)}
+            </Text>
+            <Text>Reviews</Text>
+          </View>
+          <View style={[styles.centerAlign]}>
+            <Text testID="ratingAverage" fontWeight="bold">
+              {approximateNum(item.ratingAverage)}
+            </Text>
+            <Text>Rating</Text>
+          </View>
         </View>
       </View>
-      <View style={[styles.horizontalFlexContainer, styles.justifyAround]}>
-        <View style={[styles.centerAlign]}>
-          <Text testID="stargazersCount" fontWeight="bold">{approximateNum(item.stargazersCount)}</Text>
-          <Text>Stars</Text>
-        </View>
-        <View style={[styles.centerAlign]}>
-          <Text testID="forksCount" fontWeight="bold">{approximateNum(item.forksCount)}</Text>
-          <Text>Forks</Text>
-        </View>
-        <View style={[styles.centerAlign]}>
-          <Text testID="reviewCount" fontWeight="bold">{approximateNum(item.reviewCount)}</Text>
-          <Text>Reviews</Text>
-        </View>
-        <View style={[styles.centerAlign]}>
-          <Text testID="ratingAverage" fontWeight="bold">{approximateNum(item.ratingAverage)}</Text>
-          <Text>Rating</Text>
-        </View>
-      </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
