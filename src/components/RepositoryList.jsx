@@ -6,29 +6,34 @@ import theme from "../theme";
 import useRepositories from "../hooks/useRepositories";
 
 const styles = StyleSheet.create({
-  separator: {
-    height: 10,
-    backgroundColor: theme.colors.cardBackground,
-  },
+    separator: {
+        height: 10,
+        backgroundColor: theme.colors.cardBackground,
+    },
 });
 
 const ItemSeparator = () => <View style={styles.separator} />;
 
+export const RepositoryListContainer = ({repositories})=>{
+    const repositoryNodes = repositories
+        ? repositories.edges.map((edge) => edge.node)
+        : [];
+
+    return (
+        <FlatList
+            data={repositoryNodes}
+            keyExtractor={(item) => item.fullName}
+            ItemSeparatorComponent={ItemSeparator}
+            renderItem={RepositoryItem}
+        />
+    );
+};
+
 const RepositoryList = () => {
-  const { repositories } = useRepositories();
+    const { repositories } = useRepositories();
 
-  const repositoryNodes = repositories
-    ? repositories.edges.map((edge) => edge.node)
-    : [];
-
-  return (
-    <FlatList
-      keyExtractor={(item) => item.fullName}
-      data={repositoryNodes}
-      ItemSeparatorComponent={ItemSeparator}
-      renderItem={RepositoryItem}
-    />
-  );
+    return <RepositoryListContainer
+        repositories={repositories} />;
 };
 
 export default RepositoryList;

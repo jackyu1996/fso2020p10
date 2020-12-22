@@ -11,61 +11,69 @@ import theme from "../theme";
 import useSignIn from "../hooks/useSignIn";
 
 const validationSchema = yup.object().shape({
-  username: yup.string().required("Username is required"),
-  password: yup.string().required("Password is required"),
+    username: yup.string().required("Username is required"),
+    password: yup.string().required("Password is required"),
 });
 
 const styles = StyleSheet.create({
-  signInButton: {
-    backgroundColor: theme.colors.primary,
-    textAlign: "center",
-    textAlignVertical: "center",
-    color: "white",
-    lineHeight: 40,
-    borderRadius: 5,
-  },
+    signInButton: {
+        backgroundColor: theme.colors.primary,
+        textAlign: "center",
+        textAlignVertical: "center",
+        color: "white",
+        lineHeight: 40,
+        borderRadius: 5,
+    },
 });
 
 const SignInForm = ({ onSubmit }) => {
-  return (
-    <View style={{ margin: 20 }}>
-      <FormikTextInput name="username" placeholder="Username" />
-      <FormikTextInput
-        name="password"
-        placeholder="Password"
-        secureTextEntry={true}
-      />
-      <TouchableWithoutFeedback onPress={onSubmit}>
-        <Text style={styles.signInButton}>Sign In</Text>
-      </TouchableWithoutFeedback>
-    </View>
-  );
+    return (
+        <View style={{ margin: 20 }}>
+            <FormikTextInput
+                name="username"
+                placeholder="Username"
+                testID="username" />
+            <FormikTextInput
+                name="password"
+                placeholder="Password"
+                secureTextEntry={true}
+                testID="password"
+            />
+            <TouchableWithoutFeedback onPress={onSubmit}>
+                <Text style={styles.signInButton} testID="submit">Sign In</Text>
+            </TouchableWithoutFeedback>
+        </View>
+    );
+};
+
+export const SignInContainer = ({onSubmit}) =>{
+    return (
+        <Formik
+            initialValues={{ username: "", password: "" }}
+            onSubmit={onSubmit}
+            validationSchema={validationSchema}
+        >
+            {({ handleSubmit }) => <SignInForm onSubmit={handleSubmit} />}
+        </Formik>
+    );
 };
 
 const SignIn = () => {
-  const [signIn] = useSignIn();
-  let history = useHistory();
+    const [signIn] = useSignIn();
+    let history = useHistory();
 
-  const onSubmit = async (values) => {
-    const { username, password } = values;
+    const onSubmit = async (values) => {
+        const { username, password } = values;
 
-    try {
-      await signIn({ username, password });
-      history.push("/");
-    } catch (e) {
-      console.log(e);
-    }
-  };
+        try {
+            await signIn({ username, password });
+            history.push("/");
+        } catch (e) {
+            console.log(e);
+        }
+    };
 
-  return (
-    <Formik
-      initialValues={{ username: "", password: "" }}
-      onSubmit={onSubmit}
-      validationSchema={validationSchema}
-    >
-      {({ handleSubmit }) => <SignInForm onSubmit={handleSubmit} />}
-    </Formik>
-  );
+    return <SignInContainer onSubmit={onSubmit} />
 };
 
 export default SignIn;

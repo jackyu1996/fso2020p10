@@ -40,26 +40,26 @@ const RepositoryItem = ({ item }) => {
       <View style={styles.horizontalFlexContainer}>
         <Image style={styles.avatar} source={{ uri: item.ownerAvatarUrl }} />
         <View style={{ flex: 1 }}>
-          <Text fontWeight="bold">{item.fullName}</Text>
-          <Text>{item.description}</Text>
-          <Text style={styles.languageTag}>{item.language}</Text>
+          <Text testID="fullName" fontWeight="bold">{item.fullName}</Text>
+          <Text testID="description">{item.description}</Text>
+          <Text testID="language" style={styles.languageTag}>{item.language}</Text>
         </View>
       </View>
       <View style={[styles.horizontalFlexContainer, styles.justifyAround]}>
         <View style={[styles.centerAlign]}>
-          <Text fontWeight="bold">{approximateNum(item.stargazersCount)}</Text>
+          <Text testID="stargazersCount" fontWeight="bold">{approximateNum(item.stargazersCount)}</Text>
           <Text>Stars</Text>
         </View>
         <View style={[styles.centerAlign]}>
-          <Text fontWeight="bold">{approximateNum(item.forksCount)}</Text>
+          <Text testID="forksCount" fontWeight="bold">{approximateNum(item.forksCount)}</Text>
           <Text>Forks</Text>
         </View>
         <View style={[styles.centerAlign]}>
-          <Text fontWeight="bold">{approximateNum(item.reviewCount)}</Text>
+          <Text testID="reviewCount" fontWeight="bold">{approximateNum(item.reviewCount)}</Text>
           <Text>Reviews</Text>
         </View>
         <View style={[styles.centerAlign]}>
-          <Text fontWeight="bold">{approximateNum(item.ratingAverage)}</Text>
+          <Text testID="ratingAverage" fontWeight="bold">{approximateNum(item.ratingAverage)}</Text>
           <Text>Rating</Text>
         </View>
       </View>
