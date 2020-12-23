@@ -18,9 +18,9 @@ const styles = StyleSheet.create({
     borderColor: theme.colors.primary,
     borderRadius: 20,
     color: theme.colors.primary,
-    marginRight: 20,
+    margin: 10,
     textAlign: "center",
-    paddingVertical: 8,
+    paddingVertical: 10,
   },
 });
 
@@ -80,7 +80,12 @@ const SingleRepository = () => {
       renderItem={({ item }) => <ReviewItem review={item} />}
       keyExtractor={({ id }) => id}
       ItemSeparatorComponent={ItemSeparator}
-      ListHeaderComponent={() => <RepositoryInfo repository={repository} />}
+      ListHeaderComponent={() => (
+        <>
+          <RepositoryInfo repository={repository} />
+          <ItemSeparator />
+        </>
+      )}
     />
   );
 };

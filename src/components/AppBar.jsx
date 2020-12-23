@@ -39,15 +39,25 @@ const AppBar = () => {
           <Text style={styles.barText}>Repositories</Text>
         </Link>
         {data && data.authorizedUser ? (
-          <Link to="/">
-            <Text style={styles.barText} onPress={() => signOut()}>
-              Sign out
-            </Text>
-          </Link>
+          <>
+            <Link to="/review">
+              <Text style={styles.barText}>Create a review</Text>
+            </Link>
+            <Link to="/">
+              <Text style={styles.barText} onPress={() => signOut()}>
+                Sign out
+              </Text>
+            </Link>
+          </>
         ) : (
-          <Link to="/signin">
-            <Text style={styles.barText}>Sign in</Text>
-          </Link>
+          <>
+            <Link to="/signin">
+              <Text style={styles.barText}>Sign in</Text>
+            </Link>
+            <Link to="/signup">
+              <Text style={styles.barText}>Sign up</Text>
+            </Link>
+          </>
         )}
       </ScrollView>
     </View>
