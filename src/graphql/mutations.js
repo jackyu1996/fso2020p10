@@ -1,5 +1,14 @@
 import { gql } from "apollo-boost";
 
+export const SIGN_UP = gql`
+  mutation SignUp($username: String!, $password: String!) {
+    createUser(user: { username: $username, password: $password }) {
+      id
+      username
+    }
+  }
+`;
+
 export const SIGN_IN = gql`
   mutation Authorize($username: String!, $password: String!) {
     authorize(credentials: { username: $username, password: $password }) {
@@ -32,11 +41,8 @@ export const CREATE_REVIEW = gql`
   }
 `;
 
-export const SIGN_UP = gql`
-  mutation SignUp($username: String!, $password: String!) {
-    createUser(user: { username: $username, password: $password }) {
-      id
-      username
-    }
+export const DELETE_REVIEW = gql`
+  mutation DeleteReview($id: ID!) {
+    deleteReview(id: $id)
   }
 `;

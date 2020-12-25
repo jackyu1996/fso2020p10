@@ -7,10 +7,11 @@ import { format } from "date-fns";
 
 import RepositoryItem from "./RepositoryItem";
 import theme from "../theme";
-import { GET_REPO, GET_REVIEWS } from "../graphql/queries";
+import { GET_REPO } from "../graphql/queries";
 import { ItemSeparator } from "./RepositoryList";
+import useReviews from "../hooks/useReviews";
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   rating: {
     width: 40,
     height: 40,
@@ -26,10 +27,10 @@ const styles = StyleSheet.create({
 
 const RepositoryInfo = ({ repository }) => {
   return (
-    <View>
+    <View style={{ margin: theme.margins.standard }}>
       <RepositoryItem item={repository} />
       <Text
-        style={[theme.button, { margin: 20 }]}
+        style={theme.primaryButton}
         onPress={() => Linking.openURL(repository.url)}
       >
         Open in Github
@@ -38,7 +39,7 @@ const RepositoryInfo = ({ repository }) => {
   );
 };
 
-const ReviewItem = ({ review }) => {
+export const ReviewItem = ({ review }) => {
   const approximateDate = (date) => format(new Date(date), "dd.MM.yyyy");
 
   return (
@@ -46,7 +47,8 @@ const ReviewItem = ({ review }) => {
       <Text style={styles.rating}>{review.rating}</Text>
       <View style={{ flexDirection: "column", flex: 1 }}>
         <Text style={{ fontWeight: theme.fontWeights.bold }}>
-          {review.user.username}
+          {(review.user && review.user.username) ||
+            (review.repository && review.repository.fullName)}
         </Text>
         <Text style={{ color: theme.colors.textSecondary }}>
           {approximateDate(review.createdAt)}
@@ -62,27 +64,28 @@ const SingleRepository = () => {
 
   const { data: repoData } = useQuery(GET_REPO, {
     variables: { id },
-  });
-  const { data: reviewData } = useQuery(GET_REVIEWS, {
-    variables: { id },
+    fetchPolicy: "cache-and-network",
   });
 
-  if (!id || !repoData || !reviewData) {
-    return null;
-  }
+  const { reviews, fetchMore } = useReviews({ id, first: 5 });
 
-  const repository = repoData.repository;
-  const reviews = reviewData.repository.reviews.edges.map((edge) => edge.node);
+  if (!id || !repoData || !reviews) return null;
+
+  const reviewsNodes = reviews.edges.map((edge) => edge.node);
+
+  const onEndReach = () => fetchMore();
 
   return (
     <FlatList
-      data={reviews}
+      data={reviewsNodes}
       renderItem={({ item }) => <ReviewItem review={item} />}
       keyExtractor={({ id }) => id}
       ItemSeparatorComponent={ItemSeparator}
+      onEndReached={onEndReach}
+      onEndReachedThreshold={0.5}
       ListHeaderComponent={() => (
         <>
-          <RepositoryInfo repository={repository} />
+          <RepositoryInfo repository={repoData.repository} />
           <ItemSeparator />
         </>
       )}

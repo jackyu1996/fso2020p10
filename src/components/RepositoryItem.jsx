@@ -23,9 +23,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "flex-end",
   },
-  justifyAround: {
-    justifyContent: "space-evenly",
-  },
   centerAlign: {
     alignItems: "center",
   },
@@ -36,7 +33,7 @@ const approximateNum = (num) => {
 };
 
 const RepositoryItem = ({ item }) => {
-  const history = useHistory();
+  let history = useHistory();
 
   return (
     <TouchableOpacity
@@ -44,7 +41,7 @@ const RepositoryItem = ({ item }) => {
         history.push(`/repo/${item.id}`);
       }}
     >
-      <View style={styles.verticalFlexContainer}>
+      <View>
         <View style={styles.horizontalFlexContainer}>
           <Image style={styles.avatar} source={{ uri: item.ownerAvatarUrl }} />
           <View style={{ flex: 1 }}>
@@ -57,7 +54,12 @@ const RepositoryItem = ({ item }) => {
             </Text>
           </View>
         </View>
-        <View style={[styles.horizontalFlexContainer, styles.justifyAround]}>
+        <View
+          style={[
+            styles.horizontalFlexContainer,
+            { justifyContent: "space-evenly" },
+          ]}
+        >
           <View style={[styles.centerAlign]}>
             <Text testID="stargazersCount" fontWeight="bold">
               {approximateNum(item.stargazersCount)}

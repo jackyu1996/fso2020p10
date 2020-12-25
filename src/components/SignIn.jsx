@@ -1,5 +1,5 @@
 import React from "react";
-import { View, TouchableWithoutFeedback } from "react-native";
+import { View } from "react-native";
 import { useHistory } from "react-router-native";
 import { Formik } from "formik";
 import * as yup from "yup";
@@ -17,7 +17,7 @@ const validationSchema = yup.object().shape({
 
 const SignInForm = ({ onSubmit }) => {
   return (
-    <View style={{ margin: 20 }}>
+    <View style={{ margin: theme.margins.standard }}>
       <FormikTextInput
         name="username"
         placeholder="Username"
@@ -29,11 +29,9 @@ const SignInForm = ({ onSubmit }) => {
         secureTextEntry={true}
         testID="password"
       />
-      <TouchableWithoutFeedback onPress={onSubmit}>
-        <Text style={theme.button} testID="submit">
-          Sign In
-        </Text>
-      </TouchableWithoutFeedback>
+      <Text style={theme.primaryButton} onPress={onSubmit} testID="submit">
+        Sign In
+      </Text>
     </View>
   );
 };

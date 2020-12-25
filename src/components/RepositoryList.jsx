@@ -22,7 +22,8 @@ const OrderBySelect = ({ items, setOrder }) => {
     <RNPickerSelect
       placeholder={{}}
       onValueChange={(value) => setOrder(value)}
-      items={items} />
+      items={items}
+    />
   );
 };
 
@@ -38,7 +39,8 @@ const SearchKeyword = ({ setKeyword }) => {
     <Searchbar
       placeholder="Search"
       onChangeText={(value) => setInput(value)}
-      value={input} />
+      value={input}
+    />
   );
 };
 
@@ -59,17 +61,19 @@ export class RepositoryListContainer extends React.Component {
   };
 
   render() {
-    this.repositoryNodes = this.props.repositories
+    const repositoryNodes = this.props.repositories
       ? this.props.repositories.edges.map((edge) => edge.node)
       : [];
 
     return (
       <FlatList
-        data={this.repositoryNodes}
+        data={repositoryNodes}
         keyExtractor={({ id }) => id}
         ItemSeparatorComponent={ItemSeparator}
         renderItem={({ item }) => <RepositoryItem item={item} />}
         ListHeaderComponent={this.renderHeader}
+        onEndReached={this.props.onEndReach}
+        onEndReachedThreshold={0.5}
       />
     );
   }
@@ -95,13 +99,21 @@ const RepositoryList = () => {
       break;
   }
 
-  const { repositories } = useRepositories(orderBy, orderDirection, keyword);
+  const { repositories, fetchMore } = useRepositories({
+    orderBy,
+    orderDirection,
+    searchKeyword: keyword,
+    first: 8,
+  });
+
+  const onEndReach = () => fetchMore();
 
   return (
     <RepositoryListContainer
       repositories={repositories}
       setOrder={setOrder}
       setKeyword={setKeyword}
+      onEndReach={onEndReach}
     />
   );
 };

@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { View, Text, StyleSheet, ScrollView } from "react-native";
 import Constants from "expo-constants";
-import { Link } from "react-router-native";
+import { Link, useHistory } from "react-router-native";
 import { useQuery, useApolloClient } from "@apollo/client";
 
 import theme from "../theme";
@@ -26,10 +26,12 @@ const AppBar = () => {
   const { data } = useQuery(GET_AUTHORIZED_UESR);
   const apolloClient = useApolloClient();
   const authStorage = useContext(AuthStorageContext);
+  let history = useHistory();
 
   const signOut = async () => {
     await authStorage.removeAccessToken();
     apolloClient.resetStore();
+    history.push("/");
   };
 
   return (
@@ -43,7 +45,10 @@ const AppBar = () => {
             <Link to="/review">
               <Text style={styles.barText}>Create a review</Text>
             </Link>
-            <Link to="/">
+            <Link to="/my">
+              <Text style={styles.barText}>My reviews</Text>
+            </Link>
+            <Link to="/signout">
               <Text style={styles.barText} onPress={() => signOut()}>
                 Sign out
               </Text>
